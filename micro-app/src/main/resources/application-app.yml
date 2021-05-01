@@ -1,0 +1,23 @@
+---
+spring:
+  profiles: app
+  application.name: micro-app
+
+server:
+  port: 8090
+
+extension:
+  datasource:
+    default.jpa.hibernate.ddl-auto: create-drop
+    system.jpa.hibernate.ddl-auto: create-drop
+  datafixture.enabled: true
+
+---
+spring:
+  profiles: production
+  
+extension:
+  datasource:
+    default.jpa.hibernate.ddl-auto: none
+    system.jpa.hibernate.ddl-auto: none
+  datafixture.enabled: false

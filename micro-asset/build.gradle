@@ -1,0 +1,9 @@
+bootJar {
+  mainClassName = 'sample.microasset.MicroAsset'
+  classifier = 'exec'
+}
+jar.enabled=true
+
+dependencies {
+  implementation project(':micro-core')
+}

@@ -1,0 +1,40 @@
+---
+spring:
+  application.name: micro-registry
+  banner.location: banner.txt
+  jackson.serialization:
+      indent-output: true
+  jpa.open-in-view: false
+  security.user.password: unused
+  autoconfigure.exclude:
+    - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  cloud.loadbalancer.ribbon.enabled: false
+
+server:
+  port: 8761
+
+management:
+  endpoints.web:
+    base-path: /management
+    exposure.include: "*"
+
+eureka:
+  instance:
+    hostname: localhost
+    lease-renewal-interval-in-seconds: 5
+    status-page-url-path: ${management.endpoints.web.base-path}/info
+    health-check-url-path: ${management.endpoints.web.base-path}/health
+    prefer-ip-address: true
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+
+extension.test.db.enabled: true
+
+---
+spring:
+  profiles: production
+
+extension:
+  security.cors.enabled: false
+  test.db.enabled: false

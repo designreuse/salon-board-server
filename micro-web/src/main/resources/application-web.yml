@@ -1,0 +1,39 @@
+---
+spring:
+  profiles: web
+  application.name: micro-web
+
+server:
+  port: 8080
+
+eureka.client:
+  register-with-eureka: false
+
+extension:
+  security:
+    auth:
+      enabled: false
+      admin: false
+    cors.enabled: true
+  mail.enabled: false
+  remoting:
+    app: ${APPLICATION_APP_URL:http://micro-app}
+    asset: ${APPLICATION_ASSET_URL:http://micro-asset}
+
+---
+spring:
+  profiles: production
+
+extension:
+  security:
+    auth.enabled: true
+    cors.enabled: false
+
+---
+spring:
+  profiles: admin
+
+server.port: 8081
+
+extension: 
+  security.auth.admin: true

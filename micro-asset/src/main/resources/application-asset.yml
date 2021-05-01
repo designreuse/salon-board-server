@@ -1,0 +1,28 @@
+---
+spring:
+  profiles: asset
+  application.name: micro-asset
+
+server:
+  port: 8100
+
+extension:
+  datasource:
+    asset:
+      url: ${DB_ASSET_JDBC_URL:jdbc:h2:tcp://localhost:9092/mem:asset}
+      username: ${DB_ASSET_JDBC_USERNAME:}
+      password: ${DB_ASSET_JDBC_USERNAME:}
+      jpa:
+        package-to-scan: sample.microasset.model.asset
+        hibernate.ddl-auto: create-drop
+  datafixture.enabled: true
+
+
+---
+spring:
+  profiles: production
+  
+extension:
+  datasource:
+    asset.jpa.hibernate.ddl-auto: none
+  datafixture.enabled: false

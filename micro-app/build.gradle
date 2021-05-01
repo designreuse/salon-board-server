@@ -1,0 +1,8 @@
+bootJar {
+  mainClassName = 'sample.MicroApp'
+  classifier = 'exec'
+}
+
+dependencies {
+  implementation project(':micro-core')
+}

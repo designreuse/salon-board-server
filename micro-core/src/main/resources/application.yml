@@ -1,0 +1,60 @@
+---
+spring:
+  application.name: sample-boot-micro
+  messages.basename: messages-validation, messages
+  banner.location: banner.txt
+  cache.jcache.config: classpath:ehcache.xml
+  jackson.serialization:
+      indent-output: true
+  servlet.multipart:
+    max-file-size: 20MB
+    max-request-size: 20MB
+  jpa.open-in-view: false
+  cloud.loadbalancer.ribbon.enabled: false
+
+logging.config: classpath:logback-spring.xml
+
+server:
+  port: 8080
+  error:
+    whitelabel.enabled: false
+    path: /api/error
+
+management:
+  endpoints.web:
+    base-path: /management
+    exposure.include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
+
+eureka:
+  instance:
+    status-page-url-path: ${management.endpoints.web.base-path}/info
+    health-check-url-path: ${management.endpoints.web.base-path}/health
+  client:
+    enabled: true
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka/}
+
+extension:
+  security.auth.enabled: false
+  datasource:
+    default:
+      url: ${DB_DEFAULT_JDBC_URL:jdbc:h2:tcp://localhost:9092/mem:testdb}
+      username: ${DB_DEFAULT_JDBC_USERNAME:sa}
+      password: ${DB_DEFAULT_JDBC_PASSWORD:}
+      jpa:
+        package-to-scan: sample.model
+        show-sql: false
+        hibernate.ddl-auto: none
+    system:
+      url: ${DB_SYSTEM_JDBC_URL:jdbc:h2:tcp://localhost:9092/mem:system}
+      username: ${DB_SYSTEM_JDBC_USERNAME:sa}
+      password: ${DB_SYSTEM_JDBC_PASSWORD:}
+      jpa:
+        package-to-scan: sample.context
+        show-sql: false
+        hibernate.ddl-auto: none

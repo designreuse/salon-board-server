@@ -1,0 +1,81 @@
+plugins {
+    id "org.springframework.boot" version "2.2.5.RELEASE"
+    id "io.spring.dependency-management" version "1.0.9.RELEASE"
+}
+
+ext.spring_cloud_version = "Hoxton.SR2"
+ext['lombok.version'] = "1.18.12"
+
+allprojects {
+  repositories {
+    mavenCentral() 
+  }
+}
+
+subprojects {
+  version = "2.2.5"
+
+  apply plugin: "java"
+  apply plugin: "org.springframework.boot"
+  apply plugin: "io.spring.dependency-management"
+
+  sourceCompatibility = '1.8'
+  targetCompatibility = '1.8'
+
+  def defaultEncoding = 'UTF-8'
+  tasks.withType(AbstractCompile).each { it.options.encoding = defaultEncoding }
+
+  javadoc {
+    options.encoding = defaultEncoding
+    options.addBooleanOption('Xdoclint:none', true)
+  }
+
+  compileJava.dependsOn(processResources)
+
+  test {
+    include "**/model/**", "**/controller/**", "**/usecase/**", "**/util/**", "**/context/**"
+  }
+
+  springBoot {
+    buildInfo()
+  }
+
+  dependencyManagement {
+    imports {
+      mavenBom "org.springframework.cloud:spring-cloud-dependencies:${spring_cloud_version}"
+      mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+    }
+  }
+
+  dependencies {
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    annotationProcessor "org.projectlombok:lombok"
+    compileOnly "org.springframework.boot:spring-boot-configuration-processor"
+    compileOnly "org.projectlombok:lombok"
+    implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client"
+    implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
+    implementation "org.springframework.cloud:spring-cloud-starter-sleuth"
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation "org.springframework.boot:spring-boot-starter-security"
+    implementation "org.springframework.boot:spring-boot-starter-aop"
+    implementation "org.springframework.boot:spring-boot-starter-cache"
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "com.github.ben-manes.caffeine:caffeine"
+    implementation "org.ehcache:ehcache"
+    implementation "javax.cache:cache-api"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-hibernate5"
+    implementation "commons-io:commons-io:2.6"
+    implementation "org.apache.commons:commons-lang3"
+    implementation "com.ibm.icu:icu4j:65.1"
+    implementation fileTree(dir: 'libs', includes: ['*.jar'])
+    runtime "com.h2database:h2"
+    testAnnotationProcessor "org.projectlombok:lombok"
+    testCompileOnly "org.projectlombok:lombok"
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+  }
+}
+
+wrapper {
+  gradleVersion = "6.2.2"
+}
